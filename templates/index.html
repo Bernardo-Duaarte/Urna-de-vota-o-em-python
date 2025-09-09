@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Votação</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        #resultados {
+            margin-top: 30px;
+        }
+        .alert {
+            display: none;
+            margin-top: 20px;
+        }
+        .atualizacao-info {
+            font-size: 0.9em;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #6c757d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🗳️ Sistema de Votação</h1>
+
+        <div class="row">
+            <!-- Cadastro de Eleitor -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Cadastro de Eleitor</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formCadastro">
+                            <div class="mb-3">
+                                <label for="cpfCadastro" class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpfCadastro" required maxlength="11">
+                            </div>
+                            <div class="mb-3">
+                                <label for="nomeCadastro" class="form-label">Nome</label>
+                                <input type="text" class="form-control" id="nomeCadastro" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Votação -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Votação</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formVotacao">
+                            <div class="mb-3">
+                                <label for="cpfVotacao" class="form-label">CPF do Eleitor</label>
+                                <input type="text" class="form-control" id="cpfVotacao" required maxlength="11">
+                            </div>
+                            <div class="mb-3">
+                                <label for="candidatoId" class="form-label">Candidato</label>
+                                <select class="form-control" id="candidatoId" required>
+                                    <option value="">Selecione um candidato</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Votar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="resultados" class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Resultados</h5>
+                <div class="atualizacao-info">
+                    Atualização automática
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Candidato</th>
+                                <th>Votos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaResultados">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div id="alertaSucesso" class="alert alert-success" role="alert"></div>
+        <div id="alertaErro" class="alert alert-danger" role="alert"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+        let atualizacaoAutomatica;
+
+        // Função para mostrar alertas
+        function mostrarAlerta(tipo, mensagem) {
+            const alerta = document.getElementById(tipo === 'sucesso' ? 'alertaSucesso' : 'alertaErro');
+            alerta.textContent = mensagem;
+            alerta.style.display = 'block';
+            setTimeout(() => alerta.style.display = 'none', 3000);
+        }
+
+        // Carregar lista de candidatos
+        async function carregarCandidatos() {
+            try {
+                const response = await fetch(`${API_URL}/candidatos`);
+                const candidatos = await response.json();
+                
+                const select = document.getElementById('candidatoId');
+                select.innerHTML = '<option value="">Selecione um candidato</option>';
+                
+                candidatos.forEach(candidato => {
+                    const option = document.createElement('option');
+                    option.value = candidato.id;
+                    option.textContent = candidato.nome;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                mostrarAlerta('erro', 'Erro ao carregar lista de candidatos');
+            }
+        }
+
+        // Cadastro de Eleitor
+        document.getElementById('formCadastro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cpf = document.getElementById('cpfCadastro').value;
+            const nome = document.getElementById('nomeCadastro').value;
+
+            try {
+                const response = await fetch(`${API_URL}/cadastrar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cpf, nome }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    mostrarAlerta('sucesso', data.mensagem);
+                    e.target.reset();
+                } else {
+                    mostrarAlerta('erro', data.erro);
+                }
+            } catch (error) {
+                mostrarAlerta('erro', 'Erro ao conectar com o servidor');
+            }
+        });
+
+        // Votação
+        document.getElementById('formVotacao').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cpf = document.getElementById('cpfVotacao').value;
+            const candidato_id = document.getElementById('candidatoId').value;
+
+            if (!candidato_id) {
+                mostrarAlerta('erro', 'Por favor, selecione um candidato');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/votar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cpf, candidato_id: parseInt(candidato_id) }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    mostrarAlerta('sucesso', data.mensagem);
+                    e.target.reset();
+                    atualizarResultados();
+                } else {
+                    mostrarAlerta('erro', data.erro);
+                }
+            } catch (error) {
+                mostrarAlerta('erro', 'Erro ao conectar com o servidor');
+            }
+        });
+
+        // Atualizar Resultados
+        async function atualizarResultados() {
+            try {
+                const response = await fetch(`${API_URL}/resultados`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('tabelaResultados');
+                tbody.innerHTML = '';
+                
+                data.resultados.forEach(resultado => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${resultado.id}</td>
+                        <td>${resultado.nome}</td>
+                        <td>${resultado.votos}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Erro ao atualizar resultados:', error);
+            }
+        }
+
+        // Inicialização
+        async function inicializar() {
+            await carregarCandidatos();
+            await atualizarResultados();
+            
+            // Configurar atualização automática a cada 5 segundos
+            atualizacaoAutomatica = setInterval(atualizarResultados, 5000);
+        }
+
+        // Limpar intervalo quando a página for fechada
+        window.addEventListener('beforeunload', () => {
+            if (atualizacaoAutomatica) {
+                clearInterval(atualizacaoAutomatica);
+            }
+        });
+
+        // Iniciar a aplicação
+        inicializar();
+    </script>
+</body>
+</html> 
