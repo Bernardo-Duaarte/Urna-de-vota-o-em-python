@@ -65,7 +65,7 @@ python -m venv venv
 bash
 pip install -r requirements.txt
 
-###🔹 4. Configurar conexão com PostgreSQL
+### 🔹 4. Configurar conexão com PostgreSQL
 
 Defina a variável de ambiente DATABASE_URL ou edite config.py.
 Exemplo:
@@ -78,12 +78,12 @@ Windows (PowerShell):
 powershell
 $env:DATABASE_URL = "postgresql://usuario:senha@localhost:5432/votacao"
 
-###🔹 5. Criar banco de dados no PostgreSQL
+### 🔹 5. Criar banco de dados no PostgreSQL
 
 bash
 psql -U postgres -h localhost -W -c "CREATE DATABASE votacao;"
 
-###🔹 6. Inicializar tabelas e candidatos de exemplo
+### 🔹 6. Inicializar tabelas e candidatos de exemplo
 
 Um script já foi criado (init_db.py). Execute:
 bash
@@ -98,23 +98,23 @@ Servidor rodará em:
 👉 http://localhost:5000
 
 📌 Endpoints principais
-###🔹 Listar candidatos
+### 🔹 Listar candidatos
 bash
 Copiar código
 curl http://localhost:5000/candidatos
-###🔹 Cadastrar eleitor
+### 🔹 Cadastrar eleitor
 bash
 Copiar código
 curl -X POST http://localhost:5000/cadastrar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","nome":"Fulano de Tal"}'
-###🔹 Votar
+### 🔹 Votar
 bash
 Copiar código
 curl -X POST http://localhost:5000/votar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","candidato_id":1}'
-###🔹 Resultados
+### 🔹 Resultados
 bash
 Copiar código
 curl http://localhost:5000/resultados
@@ -126,7 +126,7 @@ Copiar código
   {"id": 1, "nome": "Candidato A", "votos": 10},
   {"id": 2, "nome": "Candidato B", "votos": 5}
 ]
-###🧪 Testes
+### 🧪 Testes
 Rodar unit tests:
 
 bash
