@@ -99,25 +99,33 @@ Servidor rodará em:
 
 📌 Endpoints principais
 ### 🔹 Listar candidatos
+
 bash
-Copiar código
+
 curl http://localhost:5000/candidatos
+
 ### 🔹 Cadastrar eleitor
+
 bash
-Copiar código
+
 curl -X POST http://localhost:5000/cadastrar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","nome":"Fulano de Tal"}'
+  
 ### 🔹 Votar
+
 bash
-Copiar código
+
 curl -X POST http://localhost:5000/votar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","candidato_id":1}'
+  
 ### 🔹 Resultados
+
 bash
-Copiar código
+
 curl http://localhost:5000/resultados
+
 Retorno:
 
 json
@@ -126,20 +134,14 @@ Copiar código
   {"id": 1, "nome": "Candidato A", "votos": 10},
   {"id": 2, "nome": "Candidato B", "votos": 5}
 ]
+
 ### 🧪 Testes
-Rodar unit tests:
+
+Rodar tests:
 
 bash
-Copiar código
-pytest
-Rodar stress test:
 
-bash
-Copiar código
 python test_stress.py
+
 ├── test_stress.py # Testes de stress da API
-
-├── templates/
-
-│ └── index.html # Página inicial simples
 
