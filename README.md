@@ -37,9 +37,6 @@ Urna/
 
 │ └── index.html # Página inicial simples
 
-yaml
-Copiar código
-
 ---
 
 ## ⚙️ Passo a passo (executar sempre dentro da pasta `Urna/`)
@@ -48,51 +45,48 @@ Copiar código
 
 git clone https://github.com/SEU_USUARIO/urna-eletronica.git
 cd urna-eletronica/Urna
-###🔹 2. Criar e ativar ambiente virtual
+
+### 🔹 2. Criar e ativar ambiente virtual
 Linux / macOS:
 
 bash
-Copiar código
+
 python -m venv venv
 source venv/bin/activate
 Windows (PowerShell):
 
 powershell
-Copiar código
+
 python -m venv venv
 .\venv\Scripts\Activate.ps1   # ou: .\venv\Scripts\activate
-###🔹 3. Instalar dependências
+
+### 🔹 3. Instalar dependências
+
 bash
-Copiar código
 pip install -r requirements.txt
+
 ###🔹 4. Configurar conexão com PostgreSQL
+
 Defina a variável de ambiente DATABASE_URL ou edite config.py.
 Exemplo:
 
 Linux / macOS:
-
 bash
-Copiar código
 export DATABASE_URL="postgresql://usuario:senha@localhost:5432/votacao"
+
 Windows (PowerShell):
-
 powershell
-Copiar código
 $env:DATABASE_URL = "postgresql://usuario:senha@localhost:5432/votacao"
+
 ###🔹 5. Criar banco de dados no PostgreSQL
-bash
-Copiar código
-sudo -u postgres psql -c "CREATE DATABASE votacao;"
-Ou:
 
 bash
-Copiar código
 psql -U postgres -h localhost -W -c "CREATE DATABASE votacao;"
-###🔹 6. Inicializar tabelas e candidatos de exemplo
-Um script já foi criado (init_db.py). Execute:
 
+###🔹 6. Inicializar tabelas e candidatos de exemplo
+
+Um script já foi criado (init_db.py). Execute:
 bash
-Copiar código
 python init_db.py
 Isso cria as tabelas e adiciona:
 
@@ -100,23 +94,6 @@ Candidato A
 
 Candidato B
 
-###🔹 7. Cadastrar eleitores de exemplo
-Opcionalmente, rode:
-
-bash
-Copiar código
-python init_eleitores.py
-Ou cadastre via API:
-
-bash
-Copiar código
-curl -X POST http://localhost:5000/cadastrar \
-  -H "Content-Type: application/json" \
-  -d '{"cpf":"12345678901","nome":"Fulano de Tal"}'
-###🔹 8. Rodar a aplicação
-bash
-Copiar código
-python run.py
 Servidor rodará em:
 👉 http://localhost:5000
 
