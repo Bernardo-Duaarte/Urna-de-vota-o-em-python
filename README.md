@@ -1,7 +1,7 @@
 # 🗳️ Urna Eletrônica - API Flask + PostgreSQL
 
 Este projeto é uma simulação de uma **urna eletrônica** construída em **Flask** com integração ao banco de dados **PostgreSQL**.  
-Ele permite cadastrar candidatos, registrar votos e consultar resultados em tempo real via API.
+Ele permite cadastrar eleitores, registrar votos e consultar resultados em tempo real via API.
 
 ---
 
