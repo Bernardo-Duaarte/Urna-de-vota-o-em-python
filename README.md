@@ -18,14 +18,23 @@ Ele permite cadastrar candidatos, registrar votos e consultar resultados em temp
 
 Urna/
 ├── app.py # Configuração principal do Flask
+
 ├── config.py # Configurações (inclui banco de dados)
+
 ├── models.py # Definição das tabelas do banco
+
 ├── routes.py # Rotas da API (votação, resultados, cadastro)
+
 ├── run.py # Script para rodar o servidor
+
 ├── test_stress.py # Testes de stress da API
+
 ├── init_db.py # Script para criar tabelas e candidatos de exemplo
+
 ├── init_eleitores.py # Script para criar eleitores de exemplo
+
 ├── templates/
+
 │ └── index.html # Página inicial simples
 
 yaml
@@ -36,10 +45,10 @@ Copiar código
 ## ⚙️ Passo a passo (executar sempre dentro da pasta `Urna/`)
 
 ### 🔹 1. Clonar o repositório
-```bash
+
 git clone https://github.com/SEU_USUARIO/urna-eletronica.git
 cd urna-eletronica/Urna
-🔹 2. Criar e ativar ambiente virtual
+###🔹 2. Criar e ativar ambiente virtual
 Linux / macOS:
 
 bash
@@ -52,11 +61,11 @@ powershell
 Copiar código
 python -m venv venv
 .\venv\Scripts\Activate.ps1   # ou: .\venv\Scripts\activate
-🔹 3. Instalar dependências
+###🔹 3. Instalar dependências
 bash
 Copiar código
 pip install -r requirements.txt
-🔹 4. Configurar conexão com PostgreSQL
+###🔹 4. Configurar conexão com PostgreSQL
 Defina a variável de ambiente DATABASE_URL ou edite config.py.
 Exemplo:
 
@@ -70,7 +79,7 @@ Windows (PowerShell):
 powershell
 Copiar código
 $env:DATABASE_URL = "postgresql://usuario:senha@localhost:5432/votacao"
-🔹 5. Criar banco de dados no PostgreSQL
+###🔹 5. Criar banco de dados no PostgreSQL
 bash
 Copiar código
 sudo -u postgres psql -c "CREATE DATABASE votacao;"
@@ -79,7 +88,7 @@ Ou:
 bash
 Copiar código
 psql -U postgres -h localhost -W -c "CREATE DATABASE votacao;"
-🔹 6. Inicializar tabelas e candidatos de exemplo
+###🔹 6. Inicializar tabelas e candidatos de exemplo
 Um script já foi criado (init_db.py). Execute:
 
 bash
@@ -91,7 +100,7 @@ Candidato A
 
 Candidato B
 
-🔹 7. Cadastrar eleitores de exemplo
+###🔹 7. Cadastrar eleitores de exemplo
 Opcionalmente, rode:
 
 bash
@@ -104,7 +113,7 @@ Copiar código
 curl -X POST http://localhost:5000/cadastrar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","nome":"Fulano de Tal"}'
-🔹 8. Rodar a aplicação
+###🔹 8. Rodar a aplicação
 bash
 Copiar código
 python run.py
@@ -112,23 +121,23 @@ Servidor rodará em:
 👉 http://localhost:5000
 
 📌 Endpoints principais
-🔹 Listar candidatos
+###🔹 Listar candidatos
 bash
 Copiar código
 curl http://localhost:5000/candidatos
-🔹 Cadastrar eleitor
+###🔹 Cadastrar eleitor
 bash
 Copiar código
 curl -X POST http://localhost:5000/cadastrar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","nome":"Fulano de Tal"}'
-🔹 Votar
+###🔹 Votar
 bash
 Copiar código
 curl -X POST http://localhost:5000/votar \
   -H "Content-Type: application/json" \
   -d '{"cpf":"12345678901","candidato_id":1}'
-🔹 Resultados
+###🔹 Resultados
 bash
 Copiar código
 curl http://localhost:5000/resultados
@@ -140,7 +149,7 @@ Copiar código
   {"id": 1, "nome": "Candidato A", "votos": 10},
   {"id": 2, "nome": "Candidato B", "votos": 5}
 ]
-🧪 Testes
+###🧪 Testes
 Rodar unit tests:
 
 bash
